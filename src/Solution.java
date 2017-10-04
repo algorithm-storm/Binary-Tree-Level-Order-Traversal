@@ -21,30 +21,27 @@ public class Solution {
         String data = "{3,9,20,#,#,15,7}";
 
         String [] tree = data.substring(1,data.length()-1).split(",");
-        Queue<String> treeQ = new LinkedList<>(Arrays.asList(tree));
+        //Queue<String> treeQ = new LinkedList<>(Arrays.asList(tree));
         Queue<TreeNode> queue = new LinkedList<>();
-        TreeNode root = new TreeNode(Integer.parseInt(treeQ.poll()));
+        TreeNode root = new TreeNode(Integer.parseInt(tree[0]));
         queue.add(root);
+        TreeNode node = root;
 
-        while (!treeQ.isEmpty()) {
+        for(int i = 1 ; i < tree.length ; i++) {
 
-            TreeNode node = queue.poll();
-            String leftChildVal = treeQ.poll();
-
-            if (!leftChildVal.equals("#")) {
-                node.left = new TreeNode(Integer.parseInt(leftChildVal));
-                queue.offer(node.left);
+            if( i % 2 == 1 ){
+                node = queue.poll();
+                if(!tree[i].equals("#")){
+                    node.left = new TreeNode(Integer.parseInt(tree[i]));
+                    queue.offer(node.left);
+                }
+            }else{
+                if(!tree[i].equals("#")){
+                    node.right = new TreeNode(Integer.parseInt(tree[i]));
+                    queue.offer(node.right);
+                }
             }
-
-            if(treeQ.isEmpty()) break;
-            String rightChildVal = treeQ.poll();
-            if (!rightChildVal.equals("#")) {
-                node.right = new TreeNode(Integer.parseInt(rightChildVal));
-                queue.offer(node.right);
-            }
-
         }
-
 
         Solution a = new Solution();
         System.out.println(a.levelOrder(root));
