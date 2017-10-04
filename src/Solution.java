@@ -1,7 +1,4 @@
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Queue;
+import java.util.*;
 
 /**
  * Definition of TreeNode:
@@ -21,49 +18,33 @@ public class Solution {
 
     public static void main(String[] args){
 
-        String [] tree = {"3","9","20","#","#","15","7"};
-        Queue<Integer> treeQ = new LinkedList<>();
+        String data = "{3,9,20,#,#,15,7}";
 
-        for(int i = 0 ; i < tree.length ; i++){
-            if(tree[i] == "#"){
-                treeQ.add(Integer.MAX_VALUE);
-            }
-            else{
-                treeQ.add(Integer.parseInt(tree[i]));
-            }
-        }
-
+        String [] tree = data.substring(1,data.length()-1).split(",");
+        Queue<String> treeQ = new LinkedList<>(Arrays.asList(tree));
         Queue<TreeNode> queue = new LinkedList<>();
-        TreeNode root = new TreeNode(treeQ.poll());
+        TreeNode root = new TreeNode(Integer.parseInt(treeQ.poll()));
         queue.add(root);
 
-        while(!treeQ.isEmpty()){
+        while (!treeQ.isEmpty()) {
+
             TreeNode node = queue.poll();
+            String leftChildVal = treeQ.poll();
 
-            int value = treeQ.poll();
-            if(value == Integer.MAX_VALUE){
-                node.left = null;
-            }
-            else{
-                TreeNode left = new TreeNode(value);
-                queue.add(left);
-                node.left = left;
+            if (!leftChildVal.equals("#")) {
+                node.left = new TreeNode(Integer.parseInt(leftChildVal));
+                queue.offer(node.left);
             }
 
-            if(treeQ.isEmpty()){
-                break;
+            if(treeQ.isEmpty()) break;
+            String rightChildVal = treeQ.poll();
+            if (!rightChildVal.equals("#")) {
+                node.right = new TreeNode(Integer.parseInt(rightChildVal));
+                queue.offer(node.right);
             }
 
-            value = treeQ.poll();
-            if(value == Integer.MAX_VALUE){
-                node.right = null;
-            }
-            else{
-                TreeNode right = new TreeNode(value);
-                queue.add(right);
-                node.right = right;
-            }
         }
+
 
         Solution a = new Solution();
         System.out.println(a.levelOrder(root));
